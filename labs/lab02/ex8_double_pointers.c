@@ -15,8 +15,6 @@ student_t *create_student_t_1(int id) {
 }
 
 void create_student_t_2(student_t **student_double_ptr, int id) {
-  *student_double_ptr = malloc(sizeof(student_t));
-
   (*student_double_ptr)->id = id;
 }
 

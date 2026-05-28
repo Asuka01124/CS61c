@@ -1,5 +1,9 @@
 # You should be editing this file for the More GDB exercise of lab 2.
 # Make sure each command is on its own line
 # Lines starting with # are comments, feel free to add any to document your commands
+# 你应该在这个文件里为 lab 2 的更多 GDB 练习填写命令。
+# 确保每条命令单独占一行。
+# 以 # 开头的行是注释，可以随意添加注释来记录你的命令含义。
 
 # Please add your commands below this line
+# 请在这一行下面添加你的命令。
