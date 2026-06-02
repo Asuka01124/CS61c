@@ -83,7 +83,12 @@ game_t *create_default_game() {
 /* Task 2 */
 void free_game(game_t *game) {
   // TODO: Implement this function.
-  return;
+  free(game->snakes);
+  for (unsigned int i = 0; i < game->num_rows; i++) {
+    free(game->board[i]);
+  }
+  free(game->board);
+  free(game);
 }
 
 /* Task 3 */
