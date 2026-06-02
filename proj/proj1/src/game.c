@@ -24,7 +24,60 @@ static void update_head(game_t *game, unsigned int snum);
 /* Task 1 */
 game_t *create_default_game() {
   // TODO: Implement this function.
-  return NULL;
+  game_t *game = malloc(sizeof(game_t));
+  if (game == NULL) {
+    fprintf(stderr, "malloc failed\n");
+    exit(1);
+  }
+  snake_t *snake = malloc(sizeof(snake_t));
+  if (snake == NULL) {
+    fprintf(stderr, "malloc failed\n");
+    free(game);
+    exit(1);
+  }
+  snake->live = true;
+  game->snakes = snake;
+  game->num_rows = 18;
+  game->num_snakes = 1;
+  unsigned int num_cols = 20;
+  game->board = malloc(game->num_rows * sizeof(char*));
+  if (game->board == NULL) {
+    fprintf(stderr, "malloc failed\n");
+    free(game);
+    exit(1);
+  }
+  for (unsigned int i = 0; i < game->num_rows; i++) {
+    game->board[i] = malloc(num_cols * sizeof(char) + 2);
+    if (game->board[i] == NULL) {
+      fprintf(stderr, "malloc failed\n");
+      for (unsigned int j = 0; j < i; j++) {
+        free(game->board[j]);
+      }
+      free(game->board);
+      free(game);
+      exit(1);
+    }
+    if (i == 0 || i == game->num_rows - 1) {
+      memset(game->board[i], '#', num_cols * sizeof(char));
+    } else {
+      game->board[i][0] = '#';
+      memset(game->board[i] + 1, ' ', num_cols * sizeof(char) - 2);
+      game->board[i][num_cols - 1] = '#';
+    }
+    if (i == 2) {
+      game->board[i][2] = 'd';
+      snake->tail_row = i;
+      snake->tail_col = 2;
+      game->board[i][3] = '>';
+      game->board[i][4] = 'D';
+      snake->head_row = i;
+      snake->head_col = 4;
+      game->board[i][9] = '*';
+    }
+    game->board[i][num_cols] = '\n';         
+    game->board[i][num_cols + 1] = '\0'; 
+  }
+  return game;
 }
 
 /* Task 2 */
