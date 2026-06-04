@@ -317,15 +317,81 @@ void update_game(game_t *game, int (*add_food)(game_t *game)) {
 }
 
 /* Task 5.1 */
+// TODO: Implement this function.
 char *read_line(FILE *fp) {
-  // TODO: Implement this function.
-  return NULL;
+  size_t capacity = 16;
+  size_t len = 0;
+  char *buf = malloc(capacity);
+  if (buf == NULL) {
+    fprintf(stderr, "malloc failed\n");
+    exit(1);
+  }
+
+  while (1) {
+    size_t avail = capacity - len;
+    if (avail < 2) {
+      size_t newcap = capacity * 2;
+      char *tmp = realloc(buf, newcap);
+      if (tmp == NULL) {
+        fprintf(stderr, "realloc failed\n");
+        free(buf);
+        exit(1);
+      }
+      buf = tmp;
+      capacity = newcap;
+      avail = capacity - len;
+    }
+
+    if (fgets(buf + len, (int)avail, fp) == NULL) {
+      if (len == 0) {
+        free(buf);
+        return NULL;
+      }
+      break;
+    }
+
+    size_t added = strlen(buf + len);
+    len += added;
+
+    if (len > 0 && buf[len - 1] == '\n')
+      break;
+  }
+
+  buf[len] = '\0';
+  return buf;
 }
 
 /* Task 5.2 */
 game_t *load_board(FILE *fp) {
   // TODO: Implement this function.
-  return NULL;
+  game_t *game = create_default_game();
+  game->num_rows = 0;
+  game->num_snakes = 0;
+  game->snakes = NULL;
+  game->board = malloc(sizeof(char*));
+  if (game->board == NULL) {
+    fprintf(stderr, "malloc failed\n");
+    free(game);
+    exit(1);
+  }
+  size_t row = 0;
+  while (1) {
+    char *line = read_line(fp);
+    if (line == NULL) {
+      break;
+    }
+    char **temp = realloc(game->board, (row + 1) * sizeof(char*));
+    if (temp == NULL) {
+      fprintf(stderr, "realloc failed\n");
+      free_game(game);
+      exit(1);
+    }
+    game->board = temp;
+    game->board[row] = line;
+    row++;
+    game->num_rows++;
+  }
+  return game;
 }
 
 /*
