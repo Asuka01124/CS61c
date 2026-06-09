@@ -39,7 +39,8 @@ ex3:
     # otherwise, return ex3(a0, a1-1) * a0
     mv t0 a0      # save a0 in t0
     addi a1 a1 -1 # decrement a1
-
+    addi sp sp -4
+    sw ra 0(sp)
     jal ra ex3    # call ex3(a0, a1-1)
 
     mul a0 a0 t0  # multiply ex3(a0, a1-1) by t0
@@ -53,4 +54,6 @@ ex3_zero_case:
     li a0 1
 
 ex3_end:
+    lw ra 0(sp)
+    addi sp sp 4
     jr ra
